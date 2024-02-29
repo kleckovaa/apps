@@ -1,108 +1,77 @@
 bits 64
 
 section.data
-    extern data_x, count, result, prev, next, member, from, replace_to, text
+
+    extern kontrolni_soucet, pole, pole2, pole_otoceno, retezec, pismeno, vyskyt, pozice
     
 section.text
 
     global ukol1
 
 ukol1:
-
-    mov qword [count], 0 
-    mov rcx, 0               
-
-zpet:
-    mov rax, qword [data_x + rcx]
-    cmp rax, 1
-    je preskoc
-
-    inc qword [count]
-    add rcx, 8
-    cmp rcx, 32
-    jge hotovo
-    jmp zpet
-
-preskoc:
-    add rcx, 8
-    cmp rcx, 32             
-    jge hotovo
-
-    jmp zpet
-
-hotovo:
+    mov esi, 0
+    mov edi, 5
+    mov eax, [ pole + esi*4 ]
+.back:
+    inc esi
+    mov ecx, [ pole + esi*4 ]
+    xor eax, ecx
+    dec edi
+    jnz .back
+    jmp .fin
+.fin:
     ret
 
     global ukol2
 
 ukol2:
-    mov eax, 1
-    mov ebx, dword[prev]
-    mov ecx, dword[next]
-    mov edi, 0          ;new
-
-    cmp edi, [member]
-    jge hotovo0
-
+    mov ecx, 0      ;citac
 zpet2:
-    cmp eax, [member]
-    jge hotovo2
-    mov edi, 0
-    add edi, ebx
-    add edi, ecx
-    mov [result], edi
-    mov ebx, ecx
-    mov ecx, edi
-    inc eax
+    cmp dword[pole2 + 4 * ecx], 0
+    je hotovo2
+
+    mov eax, [pole2 + 4 * ecx]
+    mov ebx, [pole2 + 4 * ecx]
+    cmp eax, ebx
+    js zapor
+    mov ebx, 0
+    sub ebx, eax
+    mov [pole_otoceno + 4 * ecx], ebx
+    inc ecx
     jmp zpet2
+    
+
+zapor:
+    mov [pole_otoceno + 4 *ecx], eax
+    inc ecx
+    jmp zpet2
+    
 
 hotovo2:
-    ret
-
-hotovo0:
-    mov [result], edi
     ret
 
     global ukol3
 
 ukol3:
-    mov rsi, text
-    mov rdi, from
-    mov cl, [replace_to] 
-zpet3:
-    cmp  byte[rsi], 0
+    mov ecx, 0
+    mov edx, 0
+    mov edi, -1
+    mov bl, 'o'
+zpet3: 
+    mov al, [retezec + ecx]
+    cmp al, 0
     je hotovo3
-
-    mov al, [rsi]
-    cmp al, [rdi] 
-    jne zasah
-
-    mov byte[rsi], cl
-
-zasah:
-    inc rsi
+    cmp al, bl
+    jne skip
+    inc edx
+    cmp edi, -1
+    jne skip
+    mov edi, ecx
+skip:
+    inc ecx
     jmp zpet3
-
 hotovo3:
+    mov [vyskyt], edx
+    mov [pozice], edi
     ret
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-    

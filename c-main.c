@@ -2,30 +2,26 @@
 #include <stdint.h>
 
 void ukol1();
+int pole[4] = {1,2,1,2};
+int kontrolni_soucet;
+
 void ukol2();
+int pole2[4] = {1,-1,2,-2};
+int pole_otoceno[4];
+
 void ukol3();
-
-
-int data_x = 0b10101010;
-int count = 0;
-
-int result = 1;
-int prev = 0;
-int next = 1;
-int member = 10;
-
-char text[] = "rXtXzXc";
-char from = 'X';
-char replace_to = 'e';
+char retezec[] = "Ahoj z domu";
+char pismeno[] = "o";
+int vyskyt = 0;
+int pozice = -1;
 
 
 int main() {
     ukol1();
-    printf("count = %d\n", count);
+    printf("%d\n", kontrolni_soucet);
     ukol2();
-    printf("result = %d\n", result);
+    printf("%d\n", pole_otoceno[3]);
     ukol3();
-    printf("%s\n", text);
-
+    printf("vyskyt = %d\n pozice = %d\n", vyskyt, pozice);
     return 0;
 }
